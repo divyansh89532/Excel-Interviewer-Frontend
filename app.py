@@ -2,8 +2,11 @@ import streamlit as st
 import requests
 import uuid
 import base64
+from dotenv import load_dotenv 
 
-API_BASE = "http://localhost:8000"  # adjust if your FastAPI runs elsewhere
+load_dotenv()
+
+API_BASE = os.getenv('BACKEND_URI')  # adjust if your FastAPI runs elsewhere
 
 st.set_page_config(page_title="Excel Mock Interview", layout="centered")
 
