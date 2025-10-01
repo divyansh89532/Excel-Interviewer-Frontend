@@ -7,7 +7,7 @@ import os
 
 load_dotenv()
 
-API_BASE = os.getenv('BACKEND_URI')  # adjust if your FastAPI runs elsewhere
+API_BASE = os.getenv('BACKEND_URI') 
 
 st.set_page_config(page_title="Excel Mock Interview", layout="centered")
 
@@ -49,7 +49,7 @@ if "chat" not in st.session_state:
 if "feedback" not in st.session_state:
     st.session_state.feedback = None
 
-# # Debug: Show current state (you can remove this later)
+# # Debug
 # st.sidebar.write("Debug - Current Step:", st.session_state.current_step)
 
 # Step 1: Welcome Message
@@ -138,7 +138,7 @@ elif st.session_state.current_step == "instructions":
     
     **⚡ Technical Requirements:**
     - Stable internet connection
-    - Modern web browser
+    - web browser
     - No Excel installation required
     
     **⏱️ Duration**: Approximately 10-15 minutes
@@ -172,7 +172,7 @@ elif st.session_state.current_step == "interview" and st.session_state.current_q
     
     st.subheader("Current Question")
 
-    # Dynamic widget key ensures input resets every new question
+   
     widget_key = f"answer_input_{len(st.session_state.chat)}"
 
     with st.form(key="answer_form"):
@@ -189,7 +189,7 @@ elif st.session_state.current_step == "interview" and st.session_state.current_q
         if not answer.strip():
             st.warning("Please type an answer before submitting.")
         else:
-            with st.spinner("Evaluating your answer..."):
+            with st.spinner("Submitting your answer..."):
                 try:
                     payload = {
                         "session_id": st.session_state.session_id,
@@ -204,13 +204,11 @@ elif st.session_state.current_step == "interview" and st.session_state.current_q
                     st.error(f"Error submitting answer: {e}")
                     res = {}
 
-            # Store answer with the correct question
             st.session_state.chat.append({
                 "q": st.session_state.current_q,
                 "a": answer
             })
 
-            # Move to next question or finish
             if "next_question" in res:
                 st.session_state.current_q = res["next_question"]
             else:
@@ -232,7 +230,7 @@ elif st.session_state.current_step == "interview" and st.session_state.current_q
 elif st.session_state.current_step == "results":
     st.info("🎉 Interview complete! See your detailed feedback below.")
     
-    # Show chat history
+    # chat history
     if st.session_state.chat:
         st.write("### 📝 Your Answers")
         for i, item in enumerate(st.session_state.chat, 1):
@@ -240,7 +238,7 @@ elif st.session_state.current_step == "results":
             st.markdown(f"**Your Answer:** {item['a']}")
             st.markdown("---")
 
-    # Show final feedback when available
+    # final feedback when available
     if st.session_state.feedback:
         feedback_data = st.session_state.feedback
         user_details = st.session_state.user_details
@@ -259,7 +257,7 @@ elif st.session_state.current_step == "results":
         
         st.markdown("---")
         
-        # Performance summary in columns
+        # Performance summary
         st.subheader("📈 Performance Summary")
         col1, col2, col3, col4 = st.columns(4)
         
@@ -270,7 +268,7 @@ elif st.session_state.current_step == "results":
             st.metric("Percentage", f"{feedback_data['percentage']}%")
         
         with col3:
-            # Color code performance level
+            # performance level
             performance = feedback_data['performance']
             if performance == "Excellent":
                 color = "green"
@@ -305,10 +303,10 @@ elif st.session_state.current_step == "results":
         # Download PDF Report
         st.markdown("---")
         st.subheader("📄 Detailed Report")
-        st.write("Download a comprehensive PDF report with detailed analysis of each question and your performance:")
+        st.write("Download a comprehensive PDF report with detailed analysis of each question and your performance this might take a moment :")
         
         if st.button("📥 Generate Detailed PDF Report", type="primary"):
-            with st.spinner("Generating professional PDF report..."):
+            with st.spinner("Generating PDF report..."):
                 try:
                     # Include user details in the request
                     response = requests.get(
